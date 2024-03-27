@@ -23,16 +23,16 @@ class Cache:
             ) -> Union[str, bytes, int, float, None]:
         """ method that converts data to desiired standard """
         value = self._redis.get(key)
-        if value is not None and fn is not None:
+        if value is not None and fn is not None and callable(fn):
             return fn(value)
         return value
 
     def get_str(self, key: str) -> str:
         """ method that parametrize Cache.get with the correct conversion
     function """
-    return self.get(key, fn=lambda x: x.decode("utf-8"))
+    return self.get(key, lambda x: x.decode("utf-8"))
 
     def get_int(self, key: str) -> int:
         """ method that parametrize Cache.get with the correct conversion
             function """
-    return self.get(key, fn=int)
+        data = self
