@@ -12,19 +12,21 @@ if __name__ == "__main__":
     collection = db.nginx
 
     total_logs = collection.count_documents({})
+    get = collection.count_documents({'method': 'GET'})
+    post = collection.count_documents({'method': 'POST'})
+    put = collection.count_documents({'method': 'PUT'})
+    patch = collection.count_documents({'method': 'patch'})
+    delete = collection.count_documents({'method': 'DELETE'})
+    status = collection.count_documents({
+        'method': 'GET',
+        'path': '/status'
+        })
 
-    print(f"Total logs: {total_logs} logs")
-
-    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
-    method_counts = {
-        method: collection.count_documents({"method": method})
-        for method in methods
-    }
-
+    print(f"{total_logs} logs")
     print("Methods:")
-    for method in methods:
-        print(f"\t{method}: {method_counts[method]}")
-
-    status_count = collection.count_documents({
-        "method": "GET", "path": "/status"})
-    print(f"GET /status: {status_count}")
+    print(f"\tmethod GET: {get}")
+    print(f"\tmethod POST: {post}")
+    print(f"\tmethod PUT: {put}")
+    print(f"\tmethod PATCH: {patch}")
+    print(f"\tmethod DELETE: {delete}")
+    print(f"{status} status check")
